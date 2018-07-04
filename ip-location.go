@@ -45,7 +45,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(ip)
 	location, _ := city.Find(ip)
-	ipLocation := &IpLocation{location[0], location[0], location[0]}
+	ipLocation := &IpLocation{location[0], location[1], location[2]}
 	bytes, _ := json.Marshal(ipLocation)
 	s := string(bytes)
 	w.Header().Add("Content-Type","application/json; charset=utf-8")
