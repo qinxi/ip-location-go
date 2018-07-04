@@ -10,17 +10,17 @@ import (
 )
 
 
-var city,err  = datx.NewCity("17monipdb.datx")
+var city *datx.City
+var err error
 
 func main(){
 	var datafile string
 	flag.StringVar(&datafile, "datafile", "17monipdb.datx", "datafile path")
 	var port string
-	flag.StringVar(&port, "port", "18080", "server port")
+	flag.StringVar(&port, "port", "8080", "server port")
 	flag.Parse()
 	flag.Usage()
-
-	city ,_ = datx.NewCity(datafile)
+	city ,err = datx.NewCity(datafile)
 	if err == nil {
 		http.HandleFunc("/location", location)
 		http.HandleFunc("/", handler)
