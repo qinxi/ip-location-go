@@ -7,6 +7,7 @@ import (
 	"log"
 	"encoding/json"
 	"flag"
+	"regexp"
 )
 
 
@@ -37,15 +38,25 @@ type IpLocation struct {
 	City string `json:"city"`
 }
 
+func findCity(ip string)*IpLocation {
+	location, _ := city.Find(ip)
+	ipLocation := &IpLocation{location[0], location[1], location[2]}
+	return ipLocation
+}
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	ip := r.FormValue("ip")
 	if ip == "" {
+		ip = r.RemoteAddr
+	}
+	reg := regexp.MustCompile(`((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))`)
+	array := reg.FindAllString(ip, 1)
+	if len(array)==0{
 		return
 	}
+	ip = array[0]
 	log.Println(ip)
-	location, _ := city.Find(ip)
-	ipLocation := &IpLocation{location[0], location[1], location[2]}
+	ipLocation := findCity(ip)
 	bytes, _ := json.Marshal(ipLocation)
 	s := string(bytes)
 	w.Header().Add("Content-Type","application/json; charset=utf-8")
@@ -56,8 +67,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func location(w http.ResponseWriter, r *http.Request) {
 	ip := r.FormValue("ip")
 	if ip == "" {
+		ip = r.RemoteAddr
+	}
+	reg := regexp.MustCompile(`((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))`)
+	array := reg.FindAllString(ip, 1)
+	if len(array)==0{
 		return
 	}
+	ip = array[0]
 	log.Println(ip)
 	location, _ := city.FindLocation(ip)
 	w.Header().Add("Content-Type","application/json; charset=utf-8")
