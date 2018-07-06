@@ -1,6 +1,11 @@
 IP地址查询
 
-构建 go build
+- go build
+ - [windows] go build -o build/ip-location.exe
+ - [linux] go build -o build/ip-location
+- gox build
+ - gox -output="build/ip-location_{{.OS}}_{{.Arch}}"
+
 
 运行参数
 

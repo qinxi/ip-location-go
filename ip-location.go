@@ -27,6 +27,8 @@ func main(){
 		http.HandleFunc("/", handler)
 		log.Println("server is start on "+ port)
 		log.Fatal(http.ListenAndServe(":"+port, nil))
+	}else {
+		log.Println("datafile not found, retry use the '-datafile path_to_data_file' ")
 	}
 
 
